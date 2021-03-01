@@ -88,3 +88,22 @@ router.post("/login", async (req, res) => {
       console.log(error.message);
     }
   });
+
+  // Loggedin
+router.get("/user", async (req, res) => {
+    try {
+      const cookie = req.cookies.token;
+      const claims = jwt.verify(cookie, process.env.JWT_SECRET);
+      if (!claims) {
+        return res.status(401).send({
+          message: "unauthenticated",
+        });
+      }
+      const user = await User.findOne({ _id: claims._id });
+      const { password, ...data } = await user.toJSON();
+      res.send(data);
+    } catch (error) {
+      res.status(401).send(error.message);
+      console.log(error.message);
+    }
+  });
