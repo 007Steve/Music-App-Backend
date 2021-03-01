@@ -107,3 +107,13 @@ router.get("/user", async (req, res) => {
       console.log(error.message);
     }
   });
+
+  // Logout
+router.get("/logout", (req, res) => {
+    res
+      .cookie("token", "", {
+        httpOnly: true,
+        expires: new Date(0),
+      })
+      .send();
+  });
