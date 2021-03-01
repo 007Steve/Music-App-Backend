@@ -13,7 +13,8 @@ dotenv.config();
 const corsOpts = {
   origin: [
     "http://localhost:3000",
-    "https://music-player-frontend-007steve.vercel.app/",
+    "https://music-player-frontend-007steve.vercel.app",
+    "https://music-player-frontend.vercel.app"
   ],
   credentials: true,
   methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE"],
