@@ -51,3 +51,40 @@ router.post("/signup", async (req, res) => {
     console.log(error.message);
   }
 });
+
+// LOGIN
+router.post("/login", async (req, res) => {
+    const schema = Joi.object({
+      email: Joi.string().min(3).max(200).email().required(),
+      password: Joi.string().min(6).max(200).required(),
+    });
+    const { error } = schema.validate(req.body);
+    const { email, password } = req.body;
+    if (error) return res.status(400).send(error.details[0].message);
+  
+    try {
+      let user = await User.findOne({ email });
+  
+      if (!user) return res.status(400).send("User does not exist.");
+  
+      const passwordCorrect = await bcrypt.compare(password, user.password);
+  
+      if (!passwordCorrect) return res.status(400).send("User does not exist.");
+  
+      const token = jwt.sign(
+        { _id: user._id, username: user.username, email: user.email },
+        process.env.JWT_SECRET
+      );
+  
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+        })
+        .send({
+          message: "success",
+        });
+    } catch (error) {
+      res.status(500).send(error.message);
+      console.log(error.message);
+    }
+  });
