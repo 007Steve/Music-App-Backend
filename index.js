@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const userRouter = require("./routes/users");
+const songsRouter = require("./routes/songs");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 //Routes
+app.use("/api", songsRouter);
 app.use("/api", userRouter);
 app.listen(port, () => console.log(`server is running great ${port}`));
 
